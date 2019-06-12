@@ -60,6 +60,7 @@ if __name__ == '__main__':
 
 
 
+
 while not ( fin or fin_juego ):
 
     for event in pygame.event.get():
