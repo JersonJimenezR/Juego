@@ -1,235 +1,186 @@
+# imagenRecortada = objects.recortarImagen( 8, 12, 'animales', [12,12,12,12,12,12,12,12] )
+# contador = 0
 
-import pygame, math, fn, random, clases, objects, sprites
+# contador += 1
+#
+# if contador > 2:
+#     contador = 0
 
-
+import pygame, gm, math, random, obj
 
 if __name__ == '__main__':
 
-    ANCHO = 800
-    ALTO = 800
+    size = [620,465]
+    pantalla=gm.pantalla("Juego_Goku",size)
+    fin =False
+    gameover = False
+    life = 20
+    score = 0
+    level=200
 
-    fin = False
-    pantalla = fn.iniciar( [ANCHO,ALTO] )
+    # Grupos de sprites
+    muertes=pygame.sprite.Group()
+    estados=pygame.sprite.Group()
+    fondos=pygame.sprite.Group()
+    jugadores=pygame.sprite.Group()
+    poderes=pygame.sprite.Group()
+    rivalpoderes=pygame.sprite.Group()
+    rivales=pygame.sprite.Group()
 
-    posicionJugador = [400,700]
+    # creación del fondo
+    f=obj.Fondo(spt.fondo)
+    fondos.add(f)
 
-    # Todos los sprites deben estar contenidos en un grupo
+    # creación del jugador
+    pto=[310,410] #ubicación inicial del jugador
+    vj=[3,3] #velocidad del jugador
+    j=obj.Jugador(pto,gm.cargarImagen('goku.png'))
+    jugadores.add(j)
 
-    # Creación de grupos
+    # creación de n rivales
+    gm.CreateRv(spt.saibar,10,rivales)
 
-    jugadores = pygame.sprite.Group()
-    rivales = pygame.sprite.Group()
-    balas = pygame.sprite.Group()
-    balasRivales = pygame.sprite.Group()
-    cabeceras = pygame.sprite.Group()
+while not (fin or gameover):
 
-    # Jugadores
-
-    jugador = clases.Jugador( posicionJugador )
-    jugadores.add( jugador )
-
-
-
-    nivel = 3
-
-    if nivel == 1:
-        vidas = 3
-        numeroRivales = 10
-        powerRival = 1000
-
-    elif nivel == 2:
-        vidas = 2
-        numeroRivales = 15
-        powerRival = 500
-
-    elif nivel == 3:
-        vidas = 1
-        numeroRivales = 20
-        powerRival = 100
-
-
-    puntos = 0
-    fin_juego = False
-    balasDisparadasJugador = 0
-    balasDisparadasRival = 0
-
-    # Rivales
-
-    for nuevoRival in objects.createRivals( numeroRivales, pantalla ):
-        rivales.add( nuevoRival )
-
-
-
-while not ( fin or fin_juego ):
-
+    # Movimientos de personaje
     for event in pygame.event.get():
-
         if event.type == pygame.QUIT:
             fin = True
 
         if event.type == pygame.KEYDOWN:
-
-            if event.key == pygame.K_RIGHT:
-               jugador.velx = 5
-               jugador.vely = 0
-               jugador.image = sprites.getImage( 'iron-right' )
-
-            if event.key == pygame.K_LEFT:
-                jugador.velx = -5
-                jugador.vely = 0
-                jugador.image = sprites.getImage( 'iron-left' )
-
             if event.key == pygame.K_UP:
-               jugador.vely = 0
-               jugador.velx = 0
-               jugador.image = sprites.getImage( 'iron-standBy' )
-
+                jugadores.remove(j)
+                j = obj.Jugador([j.rect.x,j.rect.y],spt.gokuu)
+                jugadores.add(j)
+                j.vely = -vj[1]
+                j.velx = 0
             if event.key == pygame.K_DOWN:
-                jugador.vely = 0
-                jugador.velx = 0
-                jugador.image = sprites.getImage( 'iron-standBy' )
-
+                jugadores.remove(j)
+                j = obj.Jugador([j.rect.x,j.rect.y],spt.gokud)
+                jugadores.add(j)
+                j.vely = vj[1]
+                j.velx = 0
+            if event.key == pygame.K_LEFT:
+                jugadores.remove(j)
+                j = obj.Jugador([j.rect.x,j.rect.y],spt.gokul)
+                jugadores.add(j)
+                j.velx = -vj[0]
+                j.vely = 0
+            if event.key == pygame.K_RIGHT:
+                jugadores.remove(j)
+                j = obj.Jugador([j.rect.x,j.rect.y],spt.gokur)
+                jugadores.add(j)
+                j.velx = vj[0]
+                j.vely = 0
             if event.key == pygame.K_SPACE:
-
-                b = clases.BalaJugador([ jugador.rect.x + 10 , jugador.rect.y ])
-                b.vely = -7
-                balas.add(b)
-                balasDisparadasJugador +=1
+                # creación de la bala
+                jugadores.remove(j)
+                j = obj.Jugador([j.rect.x,j.rect.y],spt.gokust)
+                jugadores.add(j)
+                p = obj.Poder([j.rect.x,j.rect.y],spt.poder)
+                p.vely = -3
+                poderes.add(p)
 
         if event.type == pygame.KEYUP:
+            jugadores.remove(j)
+            j = obj.Jugador([j.rect.x,j.rect.y],spt.goku)
+            jugadores.add(j)
+            j.vely = 0
+            j.velx = 0
 
-            if event.type == pygame.K_RIGHT:
-                j.velx = 0
-
-            if event.type == pygame.K_LEFT:
-                j.velx = 0
-
-    # Control
-
+    # Control de jugador y rivales en pantalla
     for j in jugadores:
 
-        if j.rect.x > ANCHO:
+        if j.rect.x > (size[0] + j.rect.width) :
             j.rect.x = 0
-            j.velx = 5
+            j.velx = vj[0]
 
-        if j.rect.x < -1 :
-            j.rect.x = ANCHO - (j.rect.width)
-            j.velx = -5
+        if j.rect.x < 0 - j.rect.height:
+            j.rect.x = size[0]
+            j.velx = -vj[0]
 
-        if j.rect.y > ALTO:
+        if j.rect.y > (size[1] + j.rect.height) :
             j.rect.y = 0
-            j.vely = +5
+            j.vely = vj[1]
 
-        if j.rect.y < 0 :
-            j.rect.y = ALTO -j.rect.height
-            j.vely = -5
-
-        vidas = j.vidas
-
-
+        if j.rect.y < 0 - j.rect.height:
+            j.rect.y = size[1]
+            j.vely = -vj[1]
     for r in rivales:
-
-        if r.rect.x > ( ANCHO - r.rect.width ):
-            # r.rect.x =
-            r.velx = -3
-
+        if r.rect.x > (size[0] - r.rect.width) :
+            rivales.remove(r)
+            r = obj.Rival([r.rect.x,r.rect.y],spt.saibal)
+            r.velx = -2
+            rivales.add(r)
         if r.rect.x < 0:
-            # r.rect.x =
-            r.velx = 3
+            rivales.remove(r)
+            r = obj.Rival([r.rect.x,r.rect.y],spt.saibar)
+            r.velx = 2
+            rivales.add(r)
+        if random.randrange(level)>=int(level*0.999):
+            rivales.remove(r)
+            rs = obj.Rival([r.rect.x,r.rect.y],spt.saibast)
+            rs.velx = r.velx
+            rivales.add(rs)
+            rp = obj.Poder([r.rect.x,r.rect.y],spt.rivalpoder)
+            rp.vely = 2
+            rivalpoderes.add(rp)
 
-        if r.tiempo <= 0:
-            b = clases.BalaRival( [ r.rect.x , r.rect.y] )
-            b.vely = 5
-            balasRivales.add( b )
-            r.tiempo = random.randrange( powerRival )
-            balasDisparadasRival +=1
+    # Ataques
+    for p in poderes:
+        for r in rivales:
+            if pygame.sprite.collide_rect(r,p):
+                rivales.remove(r)
+                poderes.remove(p)
+                score += 1
+                m = obj.Muerte([r.rect.x,r.rect.y],spt.muerte)
+                muertes.add(m)
+        if p.rect.y < -50:
+            poderes.remove(p)
+        if len(rivales) <= 3: #len = cantidad en grupo
+            gm.CreateRv(spt.saibar,6,rivales)
+    for rp in rivalpoderes:
+        for j in jugadores:
+            if pygame.sprite.collide_rect(rp,j):
+                rivalpoderes.remove(rp)
+                life -= 1
+                m = obj.Muerte([j.rect.x,j.rect.y],spt.muerte)
+                muertes.add(m)
+        if rp.rect.y > size[1]+50:
+            poderes.remove(rp)
+    for m in muertes:
+        if m.time==0:
+            muertes.remove(m)
 
+    # Final del Juego
+    if life == 0:
+        gameover = True
 
-    for b in balas:
-
-        for e in pygame.sprite.spritecollide(b, rivales, True):
-            balas.remove( b )
-            puntos += 1
-
-        # Eliminar balas
-
-        if b.rect.y < -10:
-            balas.remove( b )
-
-        # Si existen menos de n rivales se deben crear más
-
-        if len( rivales ) < 5:
-
-            for nuevoRival in objects.createRivals( numeroRivales, pantalla ):
-                rivales.add( nuevoRival )
-
-
-    for balaRival in balasRivales:
-
-        # En la lista ls quedan guardados los jugadores que la bala le pego
-
-        ls = pygame.sprite.spritecollide( balaRival, jugadores, False)
-
-        for jugadorEliminado in ls:
-
-            vidas -= 1
-            balasRivales.remove( balaRival )
-            jugadorEliminado.vidas -= 1
-
-            if jugadorEliminado.vidas <= 0:
-                ls = pygame.sprite.spritecollide( balaRival, jugadores, True)
-                fin_juego = True
-
-        # Eliminar balasRivales que salieron de pantalla
-
-        if balaRival.rect.y > ALTO:
-            balasRivales.remove( balaRival )
-
-
-
-
-    # Refresh
-
-    fn.limpiarPantalla( pantalla )
-
-    # Cabecera
-
-    objects.text( pantalla, [ 50,50 ], 'Vidas: ' + str(vidas) )
-    objects.text( pantalla, [ 50,80 ], 'Score: ' + str( puntos ))
-
-    objects.text( pantalla, [ 300,50 ], 'Balas Jugador: ' + str( balasDisparadasJugador ))
-    objects.text( pantalla, [ 300,80 ], 'Balas Rival: ' + str( balasDisparadasRival ))
-
-    objects.text( pantalla, [ 550,50 ], 'Nivel de juego: ' + str( nivel ))
-
-
-    # Actualizar posiciones
-
+    # Indicadores, estados, dibujado y refresco
+    # Indicadores
+    fondos.draw(pantalla)
+    gm.StGoku(life,estados,[5,5])
+    gm.health(pantalla,life)
+    gm.score(pantalla,score)
+    # Estado
+    estados.draw(pantalla)
     jugadores.update()
     rivales.update()
-    balas.update()
-    balasRivales.update()
+    poderes.update()
+    rivalpoderes.update()
+    muertes.update()
+    # Dibujado
+    jugadores.draw(pantalla)
+    rivales.draw(pantalla)
+    rivalpoderes.draw(pantalla)
+    poderes.draw(pantalla)
+    muertes.draw(pantalla)
+    # Refresco
+    gm.up()
+    gm.reloj().tick(400)
 
-    # Dibujar
-
-    jugadores.draw( pantalla )
-    rivales.draw( pantalla )
-    balas.draw( pantalla )
-    balasRivales.draw( pantalla )
-    cabeceras.draw( pantalla )
-
-    fn.refresh()
-
-fn.limpiarPantalla( pantalla )
-objects.text( pantalla, [ 400,400 ], 'Fin de Juego' )
-objects.text( pantalla, [ 400,350 ], 'Puntos obtenidos: ' + str( puntos ))
-fn.refresh()
-
-fin = False
-
-while not fin:
-
+gm.gameover(pantalla,score)
+while not (fin):
     for event in pygame.event.get():
-
         if event.type == pygame.QUIT:
             fin = True

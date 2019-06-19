@@ -97,3 +97,42 @@ def Rosa(p,pto=[0,0],n=5,lg=100,cl=RGB().get('rojo')):
             r=lg*math.sin(math.radians(n*i))
             Puntos.append(CaToPa(p,translate(PoToCa([r,i]),pto)))
     pygame.draw.polygon(p,cl,Puntos,2)
+<<<<<<< HEAD
+=======
+def recortarImagen( filas, columnas, imagen, limites ):
+
+    lista = []
+    matriz = []
+
+    imageToRecort = sprites.getImage( imagen )
+    metadata = imageToRecort.get_rect() # return posx, posy, ancho, alto
+
+    anchoImage = metadata[2]
+    altoImage = metadata[3]
+    anchoCorte = int( anchoImage / columnas )
+    altoCorte = int( altoImage / filas )
+
+    for i in range( filas ):
+
+        fila = []
+
+        for j in range( limites[i] ): # limites = cantidad de imagenes en la columna i
+
+            cuadroRecortado = imageToRecort.subsurface( j * anchoCorte, i * altoCorte, anchoCorte, altoCorte)
+            fila.append( cuadroRecortado )
+
+        matriz.append( fila )
+
+    return matriz
+    '''
+        Funcion para recortar imagen
+
+        Params
+            filas: cantidad de sprites que tiene la imagen en las filas
+            columnas: cantidad de sprites que tiene la imagen en la columnas
+            imagen: nombre de la imagen (String) Ej: 'imagen1'
+            limites[]: cantidad de sprites que tiene la imagen en cada fila
+    '''
+def cargarImagen(imagen):
+    return pygame.image.load('img/'+imagen)
+>>>>>>> feature/animacion
