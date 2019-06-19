@@ -1,4 +1,4 @@
-import pygame
+import pygame, obj
 
 #Miscelanea
 def clean(p):
@@ -18,6 +18,31 @@ def pantalla(title,size=[640,480]):
     pygame.display.set_caption(title)
     P=pygame.display.set_mode(size)
     return P
+
+#Juegos
+    #sprites
+def CreateRv(imagen,n,group,size=[640,480],limit=[60,250]):
+    for i in range(n):
+        s = obj.Rival([0,0],imagen)
+        s.rect.x = random.randrange(size[0])
+        s.rect.y = random.randrange(limit[0],size[1]-limit[1])
+        group.add(s)
+def StGoku(life,group,pi=[5,5],base=20):
+    for s in group:
+        group.remove(s)
+    state = round((life/base)*100)
+    if state < 25:
+        s=obj.Estado(pi,'goku25.png')
+        group.add(s)
+    elif state <50:
+        s=obj.Estado(pi,'goku50.png')
+        group.add(s)
+    elif state <75:
+        s=obj.Estado(pi,'goku75.png')
+        group.add(s)
+    else:
+        s=obj.Estado(pi,'goku100.png')
+        group.add(s)
 
 #Indicadores
 def health(p,life,pto=[50,5],base=20):
@@ -40,7 +65,7 @@ def gameover(p,score,color=RGB().get('blanco')):
     puntaje= font.render('Total Score= '+str(score), True,color)
     final= font.render('GAMEOVER', True,RGB().get('rojo'))
     end=pygame.sprite.Group()
-    f=obj.Fondo(spt.final)
+    f=obj.Fondo('gameover.png')
     end.add(f)
     end.draw(p)
     p.blit(puntaje,[Centro(p)[0]-round(p.get_size()[0]/12),Centro(p)[1]+40-round(p.get_size()[1]/12)])
@@ -97,8 +122,6 @@ def Rosa(p,pto=[0,0],n=5,lg=100,cl=RGB().get('rojo')):
             r=lg*math.sin(math.radians(n*i))
             Puntos.append(CaToPa(p,translate(PoToCa([r,i]),pto)))
     pygame.draw.polygon(p,cl,Puntos,2)
-<<<<<<< HEAD
-=======
 def recortarImagen( filas, columnas, imagen, limites ):
 
     lista = []
@@ -135,4 +158,3 @@ def recortarImagen( filas, columnas, imagen, limites ):
     '''
 def cargarImagen(imagen):
     return pygame.image.load('img/'+imagen)
->>>>>>> feature/animacion

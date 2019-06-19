@@ -1,10 +1,10 @@
-import pygame
+import pygame, gm
 
 
 class Estado (pygame.sprite.Sprite):
     def __init__(self,pto,imagen):
         pygame.sprite.Sprite.__init__(self)
-        self.image = imagen
+        self.image = gm.cargarImagen(imagen)
         self.rect = self.image.get_rect()
         self.rect.x = pto[0]
         self.rect.y = pto[1]
@@ -12,7 +12,7 @@ class Estado (pygame.sprite.Sprite):
 class Rival (pygame.sprite.Sprite):
     def __init__(self,pto,imagen):
         pygame.sprite.Sprite.__init__(self)
-        self.image = imagen
+        self.image = gm.cargarImagen(imagen)
         self.rect = self.image.get_rect()
         self.rect.x = pto[0]
         self.rect.y = pto[1]
@@ -25,13 +25,13 @@ class Rival (pygame.sprite.Sprite):
 class Fondo (pygame.sprite.Sprite):
     def __init__(self,imagen):
         pygame.sprite.Sprite.__init__(self)
-        self.image = imagen
+        self.image = gm.cargarImagen(imagen)
         self.rect = self.image.get_rect()
 
 class Jugador (pygame.sprite.Sprite):
     def __init__(self,pto,imagen):
         pygame.sprite.Sprite.__init__(self)
-        self.image = imagen
+        self.image = gm.cargarImagen(imagen)
         self.rect = self.image.get_rect()
         self.rect.x = pto[0]
         self.rect.y = pto[1]
@@ -44,7 +44,7 @@ class Jugador (pygame.sprite.Sprite):
 class Poder (pygame.sprite.Sprite):
     def __init__(self,pto,imagen):
         pygame.sprite.Sprite.__init__(self)
-        self.image = imagen
+        self.image = gm.cargarImagen(imagen)
         self.rect = self.image.get_rect()
         self.rect.x = pto[0]
         self.rect.y = pto[1]
@@ -55,7 +55,7 @@ class Poder (pygame.sprite.Sprite):
 class Muerte (pygame.sprite.Sprite):
     def __init__(self,pto,imagen):
         pygame.sprite.Sprite.__init__(self)
-        self.image = imagen
+        self.image = gm.cargarImagen(imagen)
         self.rect = self.image.get_rect()
         self.rect.x = pto[0]
         self.rect.y = pto[1]

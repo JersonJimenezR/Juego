@@ -6,7 +6,7 @@
 # if contador > 2:
 #     contador = 0
 
-import pygame, gm, math, random, obj
+import pygame,math,random, obj, gm
 
 if __name__ == '__main__':
 
@@ -28,17 +28,17 @@ if __name__ == '__main__':
     rivales=pygame.sprite.Group()
 
     # creación del fondo
-    f=obj.Fondo(spt.fondo)
+    f=obj.Fondo('fondo.jpg')
     fondos.add(f)
 
     # creación del jugador
     pto=[310,410] #ubicación inicial del jugador
     vj=[3,3] #velocidad del jugador
-    j=obj.Jugador(pto,gm.cargarImagen('goku.png'))
+    j=obj.Jugador('goku stop.png')
     jugadores.add(j)
 
     # creación de n rivales
-    gm.CreateRv(spt.saibar,10,rivales)
+    gm.CreateRv('Saibaman right.png',10,rivales)
 
 while not (fin or gameover):
 
@@ -50,40 +50,40 @@ while not (fin or gameover):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 jugadores.remove(j)
-                j = obj.Jugador([j.rect.x,j.rect.y],spt.gokuu)
+                j = obj.Jugador([j.rect.x,j.rect.y],'goku up.png')
                 jugadores.add(j)
                 j.vely = -vj[1]
                 j.velx = 0
             if event.key == pygame.K_DOWN:
                 jugadores.remove(j)
-                j = obj.Jugador([j.rect.x,j.rect.y],spt.gokud)
+                j = obj.Jugador([j.rect.x,j.rect.y],'goku down.png')
                 jugadores.add(j)
                 j.vely = vj[1]
                 j.velx = 0
             if event.key == pygame.K_LEFT:
                 jugadores.remove(j)
-                j = obj.Jugador([j.rect.x,j.rect.y],spt.gokul)
+                j = obj.Jugador([j.rect.x,j.rect.y],'goku left.png')
                 jugadores.add(j)
                 j.velx = -vj[0]
                 j.vely = 0
             if event.key == pygame.K_RIGHT:
                 jugadores.remove(j)
-                j = obj.Jugador([j.rect.x,j.rect.y],spt.gokur)
+                j = obj.Jugador([j.rect.x,j.rect.y],'goku right.png')
                 jugadores.add(j)
                 j.velx = vj[0]
                 j.vely = 0
             if event.key == pygame.K_SPACE:
                 # creación de la bala
                 jugadores.remove(j)
-                j = obj.Jugador([j.rect.x,j.rect.y],spt.gokust)
+                j = obj.Jugador([j.rect.x,j.rect.y],'goku stop.png')
                 jugadores.add(j)
-                p = obj.Poder([j.rect.x,j.rect.y],spt.poder)
+                p = obj.Poder([j.rect.x,j.rect.y],'power.png')
                 p.vely = -3
                 poderes.add(p)
 
         if event.type == pygame.KEYUP:
             jugadores.remove(j)
-            j = obj.Jugador([j.rect.x,j.rect.y],spt.goku)
+            j = obj.Jugador([j.rect.x,j.rect.y],'goku stop.png')
             jugadores.add(j)
             j.vely = 0
             j.velx = 0
@@ -109,20 +109,20 @@ while not (fin or gameover):
     for r in rivales:
         if r.rect.x > (size[0] - r.rect.width) :
             rivales.remove(r)
-            r = obj.Rival([r.rect.x,r.rect.y],spt.saibal)
+            r = obj.Rival([r.rect.x,r.rect.y],'Saibaman left.png')
             r.velx = -2
             rivales.add(r)
         if r.rect.x < 0:
             rivales.remove(r)
-            r = obj.Rival([r.rect.x,r.rect.y],spt.saibar)
+            r = obj.Rival([r.rect.x,r.rect.y],'Saibaman right.png')
             r.velx = 2
             rivales.add(r)
         if random.randrange(level)>=int(level*0.999):
             rivales.remove(r)
-            rs = obj.Rival([r.rect.x,r.rect.y],spt.saibast)
+            rs = obj.Rival([r.rect.x,r.rect.y],'Saibaman shoot.png')
             rs.velx = r.velx
             rivales.add(rs)
-            rp = obj.Poder([r.rect.x,r.rect.y],spt.rivalpoder)
+            rp = obj.Poder([r.rect.x,r.rect.y],'rivalpower.png')
             rp.vely = 2
             rivalpoderes.add(rp)
 
@@ -133,18 +133,18 @@ while not (fin or gameover):
                 rivales.remove(r)
                 poderes.remove(p)
                 score += 1
-                m = obj.Muerte([r.rect.x,r.rect.y],spt.muerte)
+                m = obj.Muerte([r.rect.x,r.rect.y],'death.png')
                 muertes.add(m)
         if p.rect.y < -50:
             poderes.remove(p)
         if len(rivales) <= 3: #len = cantidad en grupo
-            gm.CreateRv(spt.saibar,6,rivales)
+            gm.CreateRv('Saibaman right.png',6,rivales)
     for rp in rivalpoderes:
         for j in jugadores:
             if pygame.sprite.collide_rect(rp,j):
                 rivalpoderes.remove(rp)
                 life -= 1
-                m = obj.Muerte([j.rect.x,j.rect.y],spt.muerte)
+                m = obj.Muerte([j.rect.x,j.rect.y],'death.png')
                 muertes.add(m)
         if rp.rect.y > size[1]+50:
             poderes.remove(rp)
