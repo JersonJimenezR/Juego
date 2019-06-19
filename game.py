@@ -16,7 +16,7 @@ if __name__ == '__main__':
     gameover = False
     life = 20
     score = 0
-    level=200
+    level=500
 
     # Grupos de sprites
     muertes=pygame.sprite.Group()
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     # creación del jugador
     pto=[310,410] #ubicación inicial del jugador
     vj=[3,3] #velocidad del jugador
-    j=obj.Jugador('goku stop.png')
+    j=obj.Jugador(pto,'goku stop.png')
     jugadores.add(j)
 
     # creación de n rivales
@@ -75,7 +75,7 @@ while not (fin or gameover):
             if event.key == pygame.K_SPACE:
                 # creación de la bala
                 jugadores.remove(j)
-                j = obj.Jugador([j.rect.x,j.rect.y],'goku stop.png')
+                j = obj.Jugador([j.rect.x,j.rect.y],'goku shoot.png')
                 jugadores.add(j)
                 p = obj.Poder([j.rect.x,j.rect.y],'power.png')
                 p.vely = -3
