@@ -102,7 +102,7 @@ def recortarImagen( filas, columnas, imagen, limites ):
     lista = []
     matriz = []
 
-    imageToRecort = sprites.getImage( imagen )
+    imageToRecort = cargarImagen( imagen )
     metadata = imageToRecort.get_rect() # return posx, posy, ancho, alto
 
     anchoImage = metadata[2]
