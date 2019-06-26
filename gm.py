@@ -2,7 +2,7 @@ import pygame,random, obj
 
 #Miscelanea
 def clean(p):
-    p.fill(RGB().get('blanco'))
+    p.fill(RGB().get('negro'))
 def up():
     pygame.display.flip()
 def Centro(p):
@@ -122,28 +122,23 @@ def Rosa(p,pto=[0,0],n=5,lg=100,cl=RGB().get('rojo')):
             r=lg*math.sin(math.radians(n*i))
             Puntos.append(CaToPa(p,translate(PoToCa([r,i]),pto)))
     pygame.draw.polygon(p,cl,Puntos,2)
-def recortarImagen( filas, columnas, imagen, limites ):
-
+def cargarImagen(imagen):
+    return pygame.image.load('img/'+imagen)
+def recortarImagen( filas, columnas, imagen):
     lista = []
     matriz = []
-
     imageToRecort = cargarImagen(imagen)
-    metadata = imageToRecort.get_rect() # return posx, posy, ancho, alto
-
-    anchoImage = metadata[2]
-    altoImage = metadata[3]
+    #metadata = imageToRecort.get_rect() # return posx, posy, ancho, alto
+    anchoImage = imageToRecort.get_rect()[2]
+    altoImage = imageToRecort.get_rect()[3]
     anchoCorte = int( anchoImage / columnas )
     altoCorte = int( altoImage / filas )
 
-    for i in range( filas ):
-
+    for i in range(filas):
         fila = []
-
-        for j in range( limites[i] ): # limites = cantidad de imagenes en la columna i
-
+        for j in range(columnas): # limites = cantidad de imagenes en la columna i
             cuadroRecortado = imageToRecort.subsurface( j * anchoCorte, i * altoCorte, anchoCorte, altoCorte)
             fila.append( cuadroRecortado )
-
         matriz.append( fila )
 
     return matriz
@@ -156,5 +151,3 @@ def recortarImagen( filas, columnas, imagen, limites ):
             imagen: nombre de la imagen (String) Ej: 'imagen1'
             limites[]: cantidad de sprites que tiene la imagen en cada fila
     '''
-def cargarImagen(imagen):
-    return pygame.image.load('img/'+imagen)
