@@ -25,6 +25,7 @@ if __name__ == '__main__':
     muertes=pygame.sprite.Group()
     pisses=pygame.sprite.Group()
     ratas=pygame.sprite.Group()
+    muros=pygame.sprite.Group()
 
     # creación del jugador
     pto=[304,60] #ubicación inicial del jugador
@@ -33,7 +34,10 @@ if __name__ == '__main__':
     palomas.add(j)
 
     # creación de n rivales
-    # gm.CreateRv('Saibaman right.png',10,rivales)
+    gm.CreateRv(gm.recortarImagen(8,12,'animales.png'),10,ratas)
+
+    m=obj.Muro([100,150],gm.recortarImagen(12,16,'terrenogen.png'))
+    muros.add(m)
 
 while not (fin or gameover):
 
@@ -66,12 +70,38 @@ while not (fin or gameover):
                 shits.add(p)
         #
         if event.type == pygame.KEYUP:
-            gm.clean(pantalla)
+            # gm.clean(pantalla)
             j.vely = 0
             j.velx = 0
             typepaloma = 2
 
-    # Control de jugador y rivales en pantalla
+    # Control de colisiones
+
+    for m in muros:
+        for p in shits:
+            if pygame.sprite.collide_rect(m,p):
+                shits.remove(p)
+                m = obj.Muerte([p.rect.x,p.rect.y],'death.png')
+                muertes.add(m)
+        for rp in pisses:
+            if pygame.sprite.collide_rect(m,rp):
+                pisses.remove(rp)
+                m = obj.Muerte([rp.rect.x,rp.rect.y],'death.png')
+                muertes.add(m)
+        for j in palomas:
+            if pygame.sprite.collide_rect(m,j):
+                if j.rect.bottom> m.rect.top and (j.vely >0):
+                    j.rect.bottom = m.rect.top
+                elif j.rect.top < m.rect.bottom and (j.vely <0):
+                    j.rect.top = m.rect.bottom
+                elif (j.rect.right > m.rect.left) and (j.velx >0):
+                    j.rect.right = m.rect.left
+                elif j.rect.left < m.rect.right and (j.velx <0):
+                    j.rect.left = m.rect.right
+                j.vely = 0
+                j.velx = 0
+
+
     for j in palomas:
 
         if j.rect.x > (size[0] + j.rect.width) :
@@ -89,52 +119,45 @@ while not (fin or gameover):
         if j.rect.y < 0 - j.rect.height:
             j.rect.y = size[1]
             j.vely = -vj[1]
-    # for r in rivales:
-    #     if r.rect.x > (size[0] - r.rect.width) :
-    #         rivales.remove(r)
-    #         r = obj.Rival([r.rect.x,r.rect.y],'Saibaman left.png')
-    #         r.velx = -2
-    #         rivales.add(r)
-    #     if r.rect.x < 0:
-    #         rivales.remove(r)
-    #         r = obj.Rival([r.rect.x,r.rect.y],'Saibaman right.png')
-    #         r.velx = 2
-    #         rivales.add(r)
-    #     if random.randrange(level)>=int(level*0.999):
-    #         rivales.remove(r)
-    #         rs = obj.Rival([r.rect.x,r.rect.y],'Saibaman shoot.png')
-    #         rs.velx = r.velx
-    #         rivales.add(rs)
-    #         rp = obj.Poder([r.rect.x,r.rect.y],'rivalpower.png')
-    #         rp.vely = 2
-    #         rivalpoderes.add(rp)
-    #
+    for r in ratas:
+        if r.rect.x > (size[0] - r.rect.width) :
+            r.velx = -2
+            r.type = 3
+        if r.rect.x < 0:
+            r.velx = 2
+            r.type = 4
+        if random.randrange(level)>=int(level*0.999):
+            rp = obj.Poder([r.rect.x,r.rect.y],'pis.png')
+            rp.vely = -2
+            pisses.add(rp)
+
     # # Ataques
-    # for p in poderes:
-    #     for r in rivales:
-    #         if pygame.sprite.collide_rect(r,p):
-    #             rivales.remove(r)
-    #             poderes.remove(p)
-    #             score += 1
-    #             m = obj.Muerte([r.rect.x,r.rect.y],'death.png')
-    #             muertes.add(m)
-    #     if p.rect.y < -50:
-    #         poderes.remove(p)
-    #     if len(rivales) <= 3: #len = cantidad en grupo
-    #         gm.CreateRv('Saibaman right.png',6,rivales)
-    # for rp in rivalpoderes:
-    #     for j in palomas:
-    #         if pygame.sprite.collide_rect(rp,j):
-    #             rivalpoderes.remove(rp)
-    #             life -= 1
-    #             m = obj.Muerte([j.rect.x,j.rect.y],'death.png')
-    #             muertes.add(m)
-    #     if rp.rect.y > size[1]+50:
-    #         poderes.remove(rp)
-    # for m in muertes:
-    #     if m.time==0:
-    #         muertes.remove(m)
-    #
+    for p in shits:
+        for r in ratas:
+            if pygame.sprite.collide_rect(r,p):
+                ratas.remove(r)
+                shits.remove(p)
+                score += 1
+                m = obj.Muerte([r.rect.x,r.rect.y],'death.png')
+                muertes.add(m)
+        if p.rect.y > size[1]+50:
+            shits.remove(p)
+        if len(ratas) <= 3: #len = cantidad en grupo
+            gm.CreateRv(gm.recortarImagen(8,12,'animales.png'),6,ratas)
+    for rp in pisses:
+        for j in palomas:
+            if pygame.sprite.collide_rect(rp,j):
+                pisses.remove(rp)
+                life -= 1
+                m = obj.Muerte([j.rect.x,j.rect.y],'death.png')
+                muertes.add(m)
+        if rp.rect.y < -50:
+            pisses.remove(rp)
+    for m in muertes:
+        if m.time==0:
+            muertes.remove(m)
+
+
     # # Final del Juego
     # if life == 0:
     #     gameover = True
@@ -149,15 +172,16 @@ while not (fin or gameover):
     # estados.draw(pantalla)
     palomas.update(pantalla,typepaloma)
     shits.update()
-    # rivales.update()
-    # rivalpoderes.update()
-    # muertes.update()
+    ratas.update(pantalla)
+    pisses.update()
+    muertes.update()
     # Dibujado
     palomas.draw(pantalla)
     shits.draw(pantalla)
-    # rivales.draw(pantalla)
-    # rivalpoderes.draw(pantalla)
-    # muertes.draw(pantalla)
+    ratas.draw(pantalla)
+    pisses.draw(pantalla)
+    muertes.draw(pantalla)
+    muros.draw(pantalla)
     # Refresco
     gm.up()
     gm.reloj().tick(100)

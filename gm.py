@@ -21,11 +21,11 @@ def pantalla(title,size=[640,480]):
 
 #Juegos
     #sprites
-def CreateRv(imagen,n,group,size=[640,480],limit=[60,250]):
+def CreateRv(imagen,n,group,size=[640,480],limit=[360,430]):
     for i in range(n):
         s = obj.Rival([0,0],imagen)
         s.rect.x = random.randrange(size[0])
-        s.rect.y = random.randrange(limit[0],size[1]-limit[1])
+        s.rect.y = random.randrange(limit[0],limit[1])
         group.add(s)
 def StGoku(life,group,pi=[5,5],base=20):
     for s in group:
