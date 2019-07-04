@@ -27,6 +27,14 @@ def CreateRv(imagen,n,group,size=[640,480],limit=[360,430]):
         s.rect.x = random.randrange(size[0])
         s.rect.y = random.randrange(limit[0],limit[1])
         group.add(s)
+
+def CreateRv2(imagen,n,group,size=[20,200],limit=[10,400]):
+    for i in range(n):
+        s = obj.Rival2([0,0],imagen)
+        s.rect.x = random.randrange(size[0])
+        s.rect.y = random.randrange(limit[0],limit[1])
+        group.add(s)
+
 def StGoku(life,group,pi=[5,5],base=20):
     for s in group:
         group.remove(s)
@@ -70,6 +78,10 @@ def gameover(p,score,color=RGB().get('blanco')):
     end.draw(p)
     p.blit(puntaje,[Centro(p)[0]-round(p.get_size()[0]/12),Centro(p)[1]+40-round(p.get_size()[1]/12)])
     p.blit(final,[Centro(p)[0]-round(p.get_size()[0]/12)+10,Centro(p)[1]-round(p.get_size()[1]/12)])
+    up()
+def message(p,text,pto=[20,20],color=RGB().get('blanco')):
+    font = pygame.font.Font(None, 25)
+    p.blit(font.render(text,True,color), pto )
     up()
 
 #Control
