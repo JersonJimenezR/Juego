@@ -21,13 +21,13 @@ def pantalla(title,size=[640,480]):
 
 #Juegos
     #sprites
-def CreateRv(imagen,n,group,size=[640,480],limit=[60,250]):
+def CreateRv(imagen,n,group,size=[1080,680],limit=[600,50]):
     for i in range(n):
         s = obj.Rival([0,0],imagen)
         s.rect.x = random.randrange(size[0])
         s.rect.y = random.randrange(limit[0],size[1]-limit[1])
         group.add(s)
-def StGoku(life,group,pi=[5,5],base=20):
+def StGoku(life,group,pi=[5,5],base=60):
     for s in group:
         group.remove(s)
     state = round((life/base)*100)
@@ -46,7 +46,7 @@ def StGoku(life,group,pi=[5,5],base=20):
 
 #Indicadores
 
-def health( p, life, pto = [50,5], base=20 ):
+def health( p, life, pto = [50,5], base=60 ):
     lifet = round((life/base)*100)
     font = pygame.font.Font(None, 25)
     if lifet <33:
@@ -66,7 +66,7 @@ def gameover(p,score,color=RGB().get('blanco')):
     puntaje= font.render('Total Score= '+str(score), True,color)
     final= font.render('GAMEOVER', True,RGB().get('rojo'))
     end=pygame.sprite.Group()
-    f=cargarImagen('gameover.png')
+    f=obj.Fondo('gameover.png')
     end.add(f)
     end.draw(p)
     p.blit(puntaje,[Centro(p)[0]-round(p.get_size()[0]/12),Centro(p)[1]+40-round(p.get_size()[1]/12)])
@@ -74,7 +74,6 @@ def gameover(p,score,color=RGB().get('blanco')):
     up()
 
 #Control
-
 
 
 
@@ -124,44 +123,27 @@ def Rosa(p,pto=[0,0],n=5,lg=100,cl=RGB().get('rojo')):
             Puntos.append(CaToPa(p,translate(PoToCa([r,i]),pto)))
     pygame.draw.polygon(p,cl,Puntos,2)
 
-'''
-    Funcion para recortar imagen
-
-    Params
-        filas: cantidad de sprites que tiene la imagen en las filas
-        columnas: cantidad de sprites que tiene la imagen en la columnas
-        imagen: nombre de la imagen (String) Ej: 'imagen1'
-        limites[]: cantidad de sprites que tiene la imagen en cada fila
-'''
-def recortarImagen( filas, columnas, imagen, limites ):
-
+def recortarImagen( filas, columnas, imagen):
     lista = []
     matriz = []
-
     imageToRecort = cargarImagen(imagen)
-    metadata = imageToRecort.get_rect() # return posx, posy, ancho, alto
-
-    anchoImage = metadata[2]
-    altoImage = metadata[3]
+    #metadata = imageToRecort.get_rect() # return posx, posy, ancho, alto
+    anchoImage = imageToRecort.get_rect()[2]
+    altoImage = imageToRecort.get_rect()[3]
     anchoCorte = int( anchoImage / columnas )
     altoCorte = int( altoImage / filas )
 
-    for i in range( filas ):
-
+    for i in range(filas):
         fila = []
-
-        for j in range( limites[i] ): # limites = cantidad de imagenes en la columna i
-
+        for j in range(columnas): # limites = cantidad de imagenes en la columna i
             cuadroRecortado = imageToRecort.subsurface( j * anchoCorte, i * altoCorte, anchoCorte, altoCorte)
             fila.append( cuadroRecortado )
-
         matriz.append( fila )
 
     return matriz
 
-
-'''
-    Cargar imagen
-'''
 def cargarImagen(imagen):
     return pygame.image.load('img/'+imagen)
+
+def cargarMapa(imagen):
+    return pygame.image.load('maps/'+imagen)
