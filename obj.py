@@ -21,9 +21,17 @@ class Rival (pygame.sprite.Sprite):
         self.state = 0
         self.imagen = imagen
         self.type = 4
+
+    def gravedad(self):
+        if self.vely != 0:
+            self.vely += 0.1
+        else:
+            self.vely = 1
+
     def update( self ):
         self.rect.x += self.velx
-        # gm.clean(pantalla)
+        self.gravedad()
+        self.rect.y+=self.vely
         if self.state<60:
             limite=int(round(self.state/30,0))
             if self.type == 1:
@@ -65,6 +73,8 @@ class Jugador (pygame.sprite.Sprite):
     def gravedad(self):
         if self.vely != 0:
             self.vely += 0.1
+        else:
+            self.vely = 1
 
     def update( self,type):
         self.rect.x += self.velx
@@ -139,7 +149,10 @@ class Muerte (pygame.sprite.Sprite):
 class Muro (pygame.sprite.Sprite):
     def __init__(self,pto,imagen):
         pygame.sprite.Sprite.__init__(self)
-        self.image = imagen[7][4]
+        self.image = imagen[0][0]
         self.rect = self.image.get_rect()
         self.rect.x = pto[0]
         self.rect.y = pto[1]
+        self.velx=0
+    def update( self):
+        self.rect.x += self.velx

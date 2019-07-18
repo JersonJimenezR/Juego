@@ -66,7 +66,7 @@ def gameover(p,score,color=RGB().get('blanco')):
     puntaje= font.render('Total Score= '+str(score), True,color)
     final= font.render('GAMEOVER', True,RGB().get('rojo'))
     end=pygame.sprite.Group()
-    f=obj.Fondo('gameover.png')
+    f=obj.Fondo('fondofinal.png')
     end.add(f)
     end.draw(p)
     p.blit(puntaje,[Centro(p)[0]-round(p.get_size()[0]/12),Centro(p)[1]+40-round(p.get_size()[1]/12)])
@@ -127,6 +127,25 @@ def recortarImagen( filas, columnas, imagen):
     lista = []
     matriz = []
     imageToRecort = cargarImagen(imagen)
+    #metadata = imageToRecort.get_rect() # return posx, posy, ancho, alto
+    anchoImage = imageToRecort.get_rect()[2]
+    altoImage = imageToRecort.get_rect()[3]
+    anchoCorte = int( anchoImage / columnas )
+    altoCorte = int( altoImage / filas )
+
+    for i in range(filas):
+        fila = []
+        for j in range(columnas): # limites = cantidad de imagenes en la columna i
+            cuadroRecortado = imageToRecort.subsurface( j * anchoCorte, i * altoCorte, anchoCorte, altoCorte)
+            fila.append( cuadroRecortado )
+        matriz.append( fila )
+
+    return matriz
+
+def recortarMapa( filas, columnas, imagen):
+    lista = []
+    matriz = []
+    imageToRecort = cargarMapa(imagen)
     #metadata = imageToRecort.get_rect() # return posx, posy, ancho, alto
     anchoImage = imageToRecort.get_rect()[2]
     altoImage = imageToRecort.get_rect()[3]
