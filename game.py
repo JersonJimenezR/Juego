@@ -43,40 +43,44 @@ if __name__ == '__main__':
 
     #creación de plataformas
 
-    m=obj.Muro([540,640],gm.recortarMapa(2,14,'plataformas.png'))
+    m=obj.Muro([300,640],gm.recortarMapa(2,14,'plataformas.png'),[0,0])
     muros.add(m)
+    m2=obj.Muro([340,640],gm.recortarMapa(2,14,'plataformas.png'),[0,1])
+    muros.add(m2)
+    m3=obj.Muro([380,640],gm.recortarMapa(2,14,'plataformas.png'),[0,2])
+    muros.add(m3)
 
 
-while (intro):
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            intro = False
-            fin =True
-            historia = False
-            gameover = True
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_KP_ENTER:
-                intro = False
-    fondos.draw(pantalla)
-    fondos.update()
-    gm.up()
-
-fondos.remove(f)
-f=obj.Fondo('historia.png')
-fondos.add(f)
-while (historia):
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            intro = False
-            fin =True
-            historia = False
-            gameover = True
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_KP_ENTER:
-                historia = False
-    fondos.draw(pantalla)
-    fondos.update()
-    gm.up()
+# while (intro):
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             intro = False
+#             fin =True
+#             historia = False
+#             gameover = True
+#         if event.type == pygame.KEYDOWN:
+#             if event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
+#                 intro = False
+#     fondos.draw(pantalla)
+#     fondos.update()
+#     gm.up()
+#
+# fondos.remove(f)
+# f=obj.Fondo('historia.png')
+# fondos.add(f)
+# while (historia):
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             intro = False
+#             fin =True
+#             historia = False
+#             gameover = True
+#         if event.type == pygame.KEYDOWN:
+#             if event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
+#                 historia = False
+#     fondos.draw(pantalla)
+#     fondos.update()
+#     gm.up()
 
 fondos.remove(f)
 f=obj.Fondo('fondo.png')
@@ -217,7 +221,6 @@ while not (fin or gameover):
                 j.rect.x = size[0]-limite[1]
                 j.velx = 0
                 f.velx = 0
-
         if j.rect.left < 0+limite[0]:
             if f.rect.x < 0:
                 j.rect.x = limite[0]
@@ -234,14 +237,13 @@ while not (fin or gameover):
                 f.rect.x = 0
                 f.velx = 0
                 j.velx = 0
-
         if j.rect.bottom > size[1]:
             j.rect.y = size[1]-j.rect.height
             j.vely -=1
             saltos = 0
         if j.rect.bottom < 0:
-            j.rect.y = size[1]
-            j.vely = -vj[1]
+            j.rect.y = 0
+            j.vely = vj[1]
     for r in rivales:
         if r.rect.x > (size[0] - r.rect.width) :
             r.velx = -2
@@ -296,17 +298,15 @@ while not (fin or gameover):
                 muertes.add(m)
         for j in jugadores:
             if pygame.sprite.collide_rect(m,j):
-                if j.rect.bottom>= m.rect.top and (j.vely >0):
-                    j.rect.y = size[1]-m.rect.height
+                if j.rect.bottom> m.rect.top :
+                    j.rect.bottom = m.rect.top
                     j.vely -=1
-                elif j.rect.top < m.rect.bottom and (j.vely <0):
+                elif j.rect.top < m.rect.bottom :
                     j.rect.top = m.rect.bottom
-                elif (j.rect.right > m.rect.left) and (j.velx >0):
+                elif j.rect.right >  m.rect.left and j.rect.left <  m.rect.left:
                     j.rect.right = m.rect.left
-                elif j.rect.left < m.rect.right and (j.velx <0):
+                elif j.rect.left < m.rect.right and j.rect.right > m.rect.right:
                     j.rect.left = m.rect.right
-                j.vely =- 1
-                j.velx = 0
         for r in rivales:
             if pygame.sprite.collide_rect(m,r):
                 if (r.rect.right > m.rect.left) and (r.velx >0):

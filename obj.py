@@ -147,9 +147,9 @@ class Muerte (pygame.sprite.Sprite):
         self.time-=1
 
 class Muro (pygame.sprite.Sprite):
-    def __init__(self,pto,imagen):
+    def __init__(self,pto,imagen,pos):
         pygame.sprite.Sprite.__init__(self)
-        self.image = imagen[0][0]
+        self.image = imagen[pos[0]][pos[1]]
         self.rect = self.image.get_rect()
         self.rect.x = pto[0]
         self.rect.y = pto[1]
