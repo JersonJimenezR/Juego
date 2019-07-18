@@ -27,6 +27,13 @@ def CreateRv(imagen,n,group,size=[1080,680],limit=[600,50]):
         s.rect.x = random.randrange(size[0])
         s.rect.y = random.randrange(limit[0],size[1]-limit[1])
         group.add(s)
+def CreateRv2(imagen,n,group,size=[1080,680],limit=[100,50]):
+    for i in range(n):
+        s1 = obj.Rival2([0,0],imagen)
+        s1.rect.x = random.randrange((size[0]/2),size[0])
+        s1.rect.y = random.randrange(limit[0],size[1]-limit[1])
+        group.add(s1)
+
 def StGoku(life,group,pi=[5,5],base=60):
     for s in group:
         group.remove(s)
@@ -57,11 +64,11 @@ def health( p, life, pto = [50,5], base=60 ):
         color = RGB().get('verde')
     vida = font.render('Health= '+str(lifet)+'%', True,color)
     p.blit(vida,pto)
-def score(p,score,color=RGB().get('blanco'),pto=[50,45]):
+def score(p,score,color=RGB().get('negro'),pto=[50,45]):
     font = pygame.font.Font(None, 25)
     puntaje= font.render('Score= '+str(score), True,color)
     p.blit(puntaje,pto)
-def gameover(p,score,color=RGB().get('blanco')):
+def gameover(p,score,color=RGB().get('negro')):
     font = pygame.font.Font(None, 25)
     puntaje= font.render('Total Score= '+str(score), True,color)
     final= font.render('GAMEOVER', True,RGB().get('rojo'))
@@ -175,5 +182,5 @@ def crearMuro( muros, pos, cantidad ):
         muros.add(m)
         anchoMuro += 40
         j+=1
-        if j > 3:
+        if j > 2:
             j=0

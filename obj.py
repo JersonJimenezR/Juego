@@ -21,33 +21,85 @@ class Rival (pygame.sprite.Sprite):
         self.state = 0
         self.imagen = imagen
         self.type = 4
-
     def gravedad(self):
         if self.vely != 0:
             self.vely += 0.1
         else:
             self.vely = 1
-
-    def update( self ):
+    def update( self,type):
         self.rect.x += self.velx
         self.gravedad()
         self.rect.y+=self.vely
-        if self.state<60:
-            limite=int(round(self.state/30,0))
-            if self.type == 1:
-                self.image = self.imagen[3][3+limite]
+        if type == 1:
+            if self.state<80:
+                limite=int(round(self.state/40,0))
+                self.image = self.imagen[0][2-limite]
                 self.state +=1
-            elif self.type == 2:
-                self.image = self.imagen[2][3+limite]
+            else:
+                self.state = 0
+        elif type == 2:
+            if self.state<80:
+                limite=int(round(self.state/40,0))
+                self.image = self.imagen[0][0+limite]
                 self.state +=1
-            elif self.type == 3:
-                self.image = self.imagen[2][0+limite]
+            else:
+                self.state = 0
+        elif type == 3:
+            if self.state<30:
+                limite=int(round(self.state/15,0))
+                self.image = self.imagen[0][2-limite]
                 self.state +=1
-            elif self.type == 4:
-                self.image = self.imagen[3][0+limite]
+            else:
+                self.state = 0
+        elif type == 4:
+            if self.state<30:
+                limite=int(round(self.state/15,0))
+                self.image = self.imagen[0][0+limite]
                 self.state +=1
-        else:
-            self.state = 0
+            else:
+                self.state = 0
+
+class Rival2 (pygame.sprite.Sprite):
+    def __init__(self,pto,imagen):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = imagen[0][0]
+        self.rect = self.image.get_rect()
+        self.rect.x = pto[0]
+        self.rect.y = pto[1]
+        self.velx=2
+        self.state = 0
+        self.imagen = imagen
+        self.type = 4
+    def update( self,type):
+        self.rect.x += self.velx
+        if type == 1:
+            if self.state<80:
+                limite=int(round(self.state/40,0))
+                self.image = self.imagen[0][2-limite]
+                self.state +=1
+            else:
+                self.state = 0
+        elif type == 2:
+            if self.state<80:
+                limite=int(round(self.state/40,0))
+                self.image = self.imagen[0][0+limite]
+                self.state +=1
+            else:
+                self.state = 0
+        elif type == 3:
+            if self.state<30:
+                limite=int(round(self.state/15,0))
+                self.image = self.imagen[0][2-limite]
+                self.state +=1
+            else:
+                self.state = 0
+        elif type == 4:
+            if self.state<30:
+                limite=int(round(self.state/15,0))
+                self.image = self.imagen[0][0+limite]
+                self.state +=1
+            else:
+                self.state = 0
 
 class Fondo (pygame.sprite.Sprite):
     def __init__(self,imagen):

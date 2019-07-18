@@ -13,6 +13,8 @@ if __name__ == '__main__':
     score = 0
     level=1000
     typegoku = 0
+    typesaiba = 4
+    typecell = 4
     fase = 1
     saltos = 0
     limite = [50,150]
@@ -25,6 +27,8 @@ if __name__ == '__main__':
     poderes=pygame.sprite.Group()
     rivalpoderes=pygame.sprite.Group()
     rivales=pygame.sprite.Group()
+    rivales2=pygame.sprite.Group()
+    rivalpoderes2=pygame.sprite.Group()
     muros=pygame.sprite.Group()
 
     # creación del fondo
@@ -39,16 +43,70 @@ if __name__ == '__main__':
     jugadores.add(j)
 
     # creación de n rivales
-    gm.CreateRv(gm.recortarImagen(8,12,'saibaman.png'),10,rivales)
+    gm.CreateRv(gm.recortarImagen(1,3,'saibamanright.png'),6,rivales)
+
+    gm.CreateRv2(gm.recortarImagen(1,3,'celljrright.png'),5,rivales2)
 
     #creación de plataformas
 
-    m=obj.Muro([300,640],gm.recortarMapa(2,14,'plataformas.png'),[0,0])
-    muros.add(m)
-    m2=obj.Muro([340,640],gm.recortarMapa(2,14,'plataformas.png'),[0,1])
-    muros.add(m2)
-    m3=obj.Muro([380,640],gm.recortarMapa(2,14,'plataformas.png'),[0,2])
-    muros.add(m3)
+        #creación de plataformas
+
+    gm.crearMuro( muros, [300,640], 3 )
+    gm.crearMuro( muros, [500,540], 10 )
+    gm.crearMuro( muros, [770,440], 8 )
+    gm.crearMuro( muros, [820,400], 1 )
+
+    # Escalera
+
+    gm.crearMuro( muros, [1500,600], 2 )
+    gm.crearMuro( muros, [1580,560], 2 )
+    gm.crearMuro( muros, [1660,520], 2 )
+
+    #Vertical
+
+    gm.crearMuro( muros, [1000,200], 1 )
+    gm.crearMuro( muros, [1000,240], 1 )
+    gm.crearMuro( muros, [1000,280], 1 )
+
+    # Vertical2
+
+    gm.crearMuro( muros, [1800,400], 1 )
+    gm.crearMuro( muros, [1800,440], 1 )
+    gm.crearMuro( muros, [1800,480], 1 )
+
+    gm.crearMuro( muros, [1300,640], 1 )
+    gm.crearMuro( muros, [1300,600], 1 )
+
+    #
+    gm.crearMuro( muros, [2000,560], 8 )
+
+    # Vertical3
+    gm.crearMuro( muros, [2800,400], 1 )
+    gm.crearMuro( muros, [2800,360], 1 )
+    gm.crearMuro( muros, [2800,320], 1 )
+    gm.crearMuro( muros, [2800,280], 1 )
+    gm.crearMuro( muros, [2800,240], 1 )
+
+    # Escalera2
+
+    gm.crearMuro( muros, [3100,600], 2 )
+    gm.crearMuro( muros, [3180,560], 2 )
+    gm.crearMuro( muros, [3260,520], 2 )
+    gm.crearMuro( muros, [3340,560], 2 )
+    gm.crearMuro( muros, [3420,600], 2 )
+
+    # Final
+
+    gm.crearMuro( muros, [3850,420], 4 )
+    gm.crearMuro( muros, [3700,480], 8 )
+
+    # Escalera3
+
+    gm.crearMuro( muros, [4500,600], 2 )
+    gm.crearMuro( muros, [4580,560], 2 )
+    gm.crearMuro( muros, [4660,520], 2 )
+    gm.crearMuro( muros, [4740,560], 2 )
+    gm.crearMuro( muros, [4820,600], 2 )
 
 
 # while (intro):
@@ -87,7 +145,6 @@ f=obj.Fondo('fondo.png')
 fondos.add(f)
 
 while not (fin or gameover):
-    # print(direccion,j.velx,j.vely)
     # Movimientos de personaje
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -154,69 +211,29 @@ while not (fin or gameover):
                     m.velx = 0
                 for rp in rivalpoderes:
                     rp.velx = rp.velx
+                for rp2 in rivalpoderes2:
+                    rp2.velx = rp2.velx
                 for r1 in rivales:
                     r1.velx = r1.velx
-
-        elif fase == 2:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    jugadores.remove(j)
-                    j=obj.Jugador([j.rect.x,j.rect.y],gm.recortarImagen(1,3,'gokuupdown.png'))
-                    jugadores.add(j)
-                    j.vely = -6
-                    j.velx = 0
-                    typegoku = 1
-                if event.key == pygame.K_DOWN:
-                    jugadores.remove(j)
-                    j=obj.Jugador([j.rect.x,j.rect.y],gm.recortarImagen(1,3,'gokuupdown.png'))
-                    jugadores.add(j)
-                    j.velx = 0
-                    typegoku = 2
-                if event.key == pygame.K_LEFT:
-                    jugadores.remove(j)
-                    j=obj.Jugador([j.rect.x,j.rect.y],gm.recortarImagen(1,6,'gokuleft.png'))
-                    jugadores.add(j)
-                    j.velx = -vj[0]
-                    j.vely = vj[1]
-                    f.velx = vj[0]
-                    typegoku = 3
-                if event.key == pygame.K_RIGHT:
-                    jugadores.remove(j)
-                    j=obj.Jugador([j.rect.x,j.rect.y],gm.recortarImagen(1,6,'gokuright.png'))
-                    jugadores.add(j)
-                    j.velx = vj[0]
-                    j.vely = vj[1]
-                    typegoku = 4
-                    f.velx = -vj[0]
-                if event.key == pygame.K_SPACE:
-                    # creación de la bala
-                    p = obj.Poder([j.rect.x,j.rect.y],'powerright.png')
-                    p.velx = 3
-                    poderes.add(p)
-
-            if event.type == pygame.KEYUP:
-                jugadores.remove(j)
-                j=obj.Jugador([j.rect.x,j.rect.y],gm.recortarImagen(16,25,'goku1.png'))
-                jugadores.add(j)
-                j.vely = vj[1]
-                j.velx = 0
-                typegoku = 0
-                f.velx = 0
-
+                for r2 in rivales2:
+                    r2.velx = r2.velx
     # Control de jugador y rivales en pantalla
     for j in jugadores:
-
         if j.rect.left > size[0]-limite[1]:
             if f.rect.x < size[0]*5-limite[1]:
                 j.rect.x = size[0]-limite[1]
                 j.velx = 0
                 f.velx =-vj[0]
                 for m in muros:
-                    m.velx =- vj[0]
+                    m.velx = - vj[0]
                 for rp in rivalpoderes:
-                    rp.velx =- vj[0]
+                    rp.velx -= vj[0]
                 for r1 in rivales:
-                    r1.velx =- vj[0]
+                    r1.velx -= vj[0]
+                for rp2 in rivalpoderes2:
+                    rp2.velx -= vj[0]
+                for r2 in rivales2:
+                    r2.velx -= vj[0]
             else:
                 j.rect.x = size[0]-limite[1]
                 j.velx = 0
@@ -227,10 +244,14 @@ while not (fin or gameover):
                 f.velx =vj[0]
                 for m in muros:
                     m.velx = vj[0]
-                for rp in rivalpoderes:
-                    rp.velx = vj[0]
-                for r1 in rivales:
-                    r1.velx = vj[0]
+                # for rp in rivalpoderes:
+                #     rp.velx = vj[0]
+                # for r1 in rivales:
+                #     r1.velx = vj[0]
+                # for rp2 in rivalpoderes2:
+                #     rp2.velx = vj[0]
+                # for r2 in rivales2:
+                #     r2.velx = vj[0]
                 j.velx = 0
             elif f.rect.x >= 0:
                 j.rect.x = limite[0]
@@ -246,11 +267,17 @@ while not (fin or gameover):
             j.vely = vj[1]
     for r in rivales:
         if r.rect.x > (size[0] - r.rect.width) :
+            rivales.remove(r)
+            r=obj.Rival([r.rect.x,r.rect.y],gm.recortarImagen(1,3,'saibamanleft.png'))
             r.velx = -2
-            r.type = 3
+            typesaiba = 3
+            rivales.add(r)
         if r.rect.x < 0:
+            rivales.remove(r)
+            r=obj.Rival([r.rect.x,r.rect.y],gm.recortarImagen(1,3,'saibamanright.png'))
             r.velx = 2
-            r.type = 4
+            typesaiba = 4
+            rivales.add(r)
         if random.randrange(level)>=int(level*0.999):
             rp = obj.Poder([r.rect.x,r.rect.y],'rivalpowerleft.png')
             rp.velx = -3
@@ -258,12 +285,36 @@ while not (fin or gameover):
         if r.rect.bottom > size[1]:
             r.rect.y = size[1]-r.rect.height
             r.vely -=1
+    for r2 in rivales2:
+        if r2.rect.x > (size[0] - r2.rect.width) :
+            rivales2.remove(r2)
+            r2=obj.Rival2([r2.rect.x,r2.rect.y],gm.recortarImagen(1,3,'celljrleft.png'))
+            r2.velx = -2
+            typecell = 3
+            rivales2.add(r2)
+        if r2.rect.x < 0:
+            rivales2.remove(r2)
+            r2=obj.Rival2([r2.rect.x,r2.rect.y],gm.recortarImagen(1,3,'celljrright.png'))
+            r2.velx = 2
+            typecell = 4
+            rivales2.add(r2)
+        if random.randrange(level)>=int(level*0.999):
+            rp2 = obj.Poder([r2.rect.x,r2.rect.y],'rivalpowerleft.png')
+            rp2.velx = -3
+            rivalpoderes2.add(rp2)
 
     # Ataques
     for p in poderes:
         for r in rivales:
             if pygame.sprite.collide_rect(r,p):
                 rivales.remove(r)
+                poderes.remove(p)
+                score += 1
+                m = obj.Muerte([r.rect.x,r.rect.y],'death.png')
+                muertes.add(m)
+        for r2 in rivales2:
+            if pygame.sprite.collide_rect(r2,p):
+                rivales2.remove(r2)
                 poderes.remove(p)
                 score += 1
                 m = obj.Muerte([r.rect.x,r.rect.y],'death.png')
@@ -279,6 +330,15 @@ while not (fin or gameover):
                 muertes.add(m)
         if rp.rect.y > size[1]+50:
             poderes.remove(rp)
+    for rp2 in rivalpoderes2:
+        for j in jugadores:
+            if pygame.sprite.collide_rect(rp2,j):
+                rivalpoderes2.remove(rp2)
+                life -= 1
+                m = obj.Muerte([j.rect.x,j.rect.y],'death.png')
+                muertes.add(m)
+        if rp2.rect.y > size[1]+50:
+            poderes.remove(rp2)
     for m in muertes:
         if m.time==0:
             muertes.remove(m)
@@ -296,11 +356,17 @@ while not (fin or gameover):
                 rivalpoderes.remove(rp)
                 m = obj.Muerte([rp.rect.x,rp.rect.y],'death.png')
                 muertes.add(m)
+        for rp2 in rivalpoderes2:
+            if pygame.sprite.collide_rect(m,rp2):
+                rivalpoderes2.remove(rp2)
+                m = obj.Muerte([rp2.rect.x,rp2.rect.y],'death.png')
+                muertes.add(m)
         for j in jugadores:
             if pygame.sprite.collide_rect(m,j):
                 if j.rect.bottom> m.rect.top :
                     j.rect.bottom = m.rect.top
                     j.vely -=1
+                    saltos = 0
                 elif j.rect.top < m.rect.bottom :
                     j.rect.top = m.rect.bottom
                 elif j.rect.right >  m.rect.left and j.rect.left <  m.rect.left:
@@ -313,6 +379,12 @@ while not (fin or gameover):
                     r.velx *= -1
                 elif r.rect.left < m.rect.right and (r.velx <0):
                     r.velx *= -1
+        for r2 in rivales2:
+            if pygame.sprite.collide_rect(m,r2):
+                if (r2.rect.right > m.rect.left) and (r2.velx >0):
+                    r2.velx *= -1
+                elif r2.rect.left < m.rect.right and (r2.velx <0):
+                    r2.velx *= -1
 
     # Final del Juego
     if life <= 0:
@@ -326,9 +398,11 @@ while not (fin or gameover):
     # Estado
     estados.draw(pantalla)
     jugadores.update(typegoku)
-    rivales.update()
+    rivales.update(typesaiba)
+    rivales2.update(typecell)
     poderes.update()
     rivalpoderes.update()
+    rivalpoderes2.update()
     fondos.update()
     muros.update()
     muertes.update()
@@ -336,6 +410,8 @@ while not (fin or gameover):
     jugadores.draw(pantalla)
     rivales.draw(pantalla)
     rivalpoderes.draw(pantalla)
+    rivales2.draw(pantalla)
+    rivalpoderes2.draw(pantalla)
     poderes.draw(pantalla)
     muertes.draw(pantalla)
     muros.draw(pantalla)
