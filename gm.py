@@ -166,3 +166,14 @@ def cargarImagen(imagen):
 
 def cargarMapa(imagen):
     return pygame.image.load('maps/'+imagen)
+
+def crearMuro( muros, pos, cantidad ):
+    j = 0
+    anchoMuro = 0
+    for i in range(cantidad):
+        m = obj.Muro([ pos[0]+anchoMuro , pos[1] ],recortarMapa(2,14,'plataformas.png'),[0,j])
+        muros.add(m)
+        anchoMuro += 40
+        j+=1
+        if j > 3:
+            j=0
