@@ -66,7 +66,7 @@ class Rival2 (pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = pto[0]
         self.rect.y = pto[1]
-        self.velx=2
+        self.velx=6
         self.state = 0
         self.imagen = imagen
         self.type = 4

@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
     # creación del jugador
     ptojugador=[50,size[1]-50] #ubicación inicial del jugador
-    vj=[20,6] #velocidad del jugador
+    vj=[10,6] #velocidad del jugador
     j=obj.Jugador(ptojugador,gm.recortarImagen(16,25,'goku1.png'))
     jugadores.add(j)
 
@@ -109,36 +109,36 @@ if __name__ == '__main__':
     gm.crearMuro( muros, [4820,600], 2 )
 
 
-# while (intro):
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             intro = False
-#             fin =True
-#             historia = False
-#             gameover = True
-#         if event.type == pygame.KEYDOWN:
-#             if event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
-#                 intro = False
-#     fondos.draw(pantalla)
-#     fondos.update()
-#     gm.up()
-#
-# fondos.remove(f)
-# f=obj.Fondo('historia.png')
-# fondos.add(f)
-# while (historia):
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             intro = False
-#             fin =True
-#             historia = False
-#             gameover = True
-#         if event.type == pygame.KEYDOWN:
-#             if event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
-#                 historia = False
-#     fondos.draw(pantalla)
-#     fondos.update()
-#     gm.up()
+while (intro):
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            intro = False
+            fin =True
+            historia = False
+            gameover = True
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
+                intro = False
+    fondos.draw(pantalla)
+    fondos.update()
+    gm.up()
+
+fondos.remove(f)
+f=obj.Fondo('historia.png')
+fondos.add(f)
+while (historia):
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            intro = False
+            fin =True
+            historia = False
+            gameover = True
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
+                historia = False
+    fondos.draw(pantalla)
+    fondos.update()
+    gm.up()
 
 fondos.remove(f)
 f=obj.Fondo('fondo.png')
@@ -387,32 +387,34 @@ while not (fin or gameover):
                     j.rect.left = m.rect.right
         for r in rivales:
             if pygame.sprite.collide_rect(m,r):
-                if (r.rect.right > m.rect.left) and (r.rect.left < m.rect.left) and (r.velx >0):
+                if r.rect.right > m.rect.left and r.rect.left < m.rect.left:
                     rivales.remove(r)
                     r=obj.Rival([r.rect.x,r.rect.y],gm.recortarImagen(1,3,'saibamanleft.png'))
+                    rivales.add(r)
                     r.velx *= -1
                     typesaiba = 3
-                    rivales.add(r)
-                elif r.rect.left < m.rect.right and r.rect.right > m.rect.right and (r.velx <0):
+                elif r.rect.left < m.rect.right and r.rect.right > m.rect.right:
                     rivales.remove(r)
-                    r=obj.Rival([r.rect.x,r.rect.y],gm.recortarImagen(1,3,'saibamanleft.png'))
-                    r.velx *= -1
-                    typesaiba = 4
+                    r=obj.Rival([r.rect.x,r.rect.y],gm.recortarImagen(1,3,'saibamanright.png'))
                     rivales.add(r)
+                    typesaiba = 4
+                    # r.velx *= -1
+
         for r2 in rivales2:
             if pygame.sprite.collide_rect(m,r2):
-                if (r2.rect.right > m.rect.left) and (r2.rect.left < m.rect.left) and (r2.velx >0):
+                if (r2.rect.right > m.rect.left) and (r2.rect.left < m.rect.left):
                     rivales2.remove(r2)
                     r2=obj.Rival2([r2.rect.x,r2.rect.y],gm.recortarImagen(1,3,'celljrleft.png'))
+                    rivales2.add(r2)
                     typecell = 3
                     r2.velx *= -1
-                    rivales2.add(r2)
-                elif r2.rect.left < m.rect.right and r2.rect.right > m.rect.right and (r2.velx <0):
+                elif r2.rect.left < m.rect.right and r2.rect.right > m.rect.right:
                     rivales2.remove(r2)
                     r2=obj.Rival2([r2.rect.x,r2.rect.y],gm.recortarImagen(1,3,'celljrright.png'))
-                    r2.velx *= -1
-                    typecell = 4
                     rivales2.add(r2)
+                    typecell = 4
+                    # r2.velx *= -1
+
 
     # Final del Juego
     if life <= 0:
