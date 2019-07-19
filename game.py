@@ -11,7 +11,7 @@ if __name__ == '__main__':
     direccion = 0
     life = 60
     score = 0
-    level=1000
+    level=450
     typegoku = 0
     typesaiba = 4
     typecell = 4
@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
     # creación del jugador
     ptojugador=[50,size[1]-50] #ubicación inicial del jugador
-    vj=[6,6] #velocidad del jugador
+    vj=[20,6] #velocidad del jugador
     j=obj.Jugador(ptojugador,gm.recortarImagen(16,25,'goku1.png'))
     jugadores.add(j)
 
@@ -166,7 +166,7 @@ while not (fin or gameover):
                             jugadores.add(j)
                             j.velx =-1.5
                             typegoku = 2
-                        j.vely =-4
+                        j.vely =-12
                 if event.key == pygame.K_LEFT:
                     jugadores.remove(j)
                     j=obj.Jugador([j.rect.x,j.rect.y],gm.recortarImagen(1,6,'gokuleft.png'))
@@ -187,11 +187,11 @@ while not (fin or gameover):
                     # creación de la bala
                     if direccion == 0:
                         p = obj.Poder([j.rect.x,j.rect.y+round(j.rect.height/3)],'powerright.png')
-                        p.velx = 3
+                        p.velx = 5
                         poderes.add(p)
                     elif direccion == 1:
                         p = obj.Poder([j.rect.x,j.rect.y+round(j.rect.height/3)],'powerleft.png')
-                        p.velx = -3
+                        p.velx = -5
                         poderes.add(p)
             if event.type == pygame.KEYUP:
                 if direccion == 0:
@@ -238,6 +238,8 @@ while not (fin or gameover):
                 j.rect.x = size[0]-limite[1]
                 j.velx = 0
                 f.velx = 0
+        if f.rect.x < size[0]*-1*4:
+            gameover = True
         if j.rect.left < 0+limite[0]:
             if f.rect.x < 0:
                 j.rect.x = limite[0]
@@ -328,8 +330,18 @@ while not (fin or gameover):
                 life -= 1
                 m = obj.Muerte([j.rect.x,j.rect.y],'death.png')
                 muertes.add(m)
-        if rp.rect.y > size[1]+50:
+        if rp.rect.y < -50:
             poderes.remove(rp)
+    for rj in rivales:
+        for j in jugadores:
+            if pygame.sprite.collide_rect(rj,j):
+                life -= 0.2
+    for rj in rivales2:
+        for j in jugadores:
+            if pygame.sprite.collide_rect(rj,j):
+                life -= 0.2
+
+
     for rp2 in rivalpoderes2:
         for j in jugadores:
             if pygame.sprite.collide_rect(rp2,j):
@@ -337,7 +349,7 @@ while not (fin or gameover):
                 life -= 1
                 m = obj.Muerte([j.rect.x,j.rect.y],'death.png')
                 muertes.add(m)
-        if rp2.rect.y > size[1]+50:
+        if rp2.rect.y < -50:
             poderes.remove(rp2)
     for m in muertes:
         if m.time==0:
@@ -363,11 +375,11 @@ while not (fin or gameover):
                 muertes.add(m)
         for j in jugadores:
             if pygame.sprite.collide_rect(m,j):
-                if j.rect.bottom> m.rect.top :
+                if j.rect.bottom> m.rect.top and j.rect.top < m.rect.top :
                     j.rect.bottom = m.rect.top
                     j.vely -=1
                     saltos = 0
-                elif j.rect.top < m.rect.bottom :
+                elif j.rect.top < m.rect.bottom and j.rect.bottom > m.rect.bottom :
                     j.rect.top = m.rect.bottom
                 elif j.rect.right >  m.rect.left and j.rect.left <  m.rect.left:
                     j.rect.right = m.rect.left
@@ -375,16 +387,32 @@ while not (fin or gameover):
                     j.rect.left = m.rect.right
         for r in rivales:
             if pygame.sprite.collide_rect(m,r):
-                if (r.rect.right > m.rect.left) and (r.velx >0):
+                if (r.rect.right > m.rect.left) and (r.rect.left < m.rect.left) and (r.velx >0):
+                    rivales.remove(r)
+                    r=obj.Rival([r.rect.x,r.rect.y],gm.recortarImagen(1,3,'saibamanleft.png'))
                     r.velx *= -1
-                elif r.rect.left < m.rect.right and (r.velx <0):
+                    typesaiba = 3
+                    rivales.add(r)
+                elif r.rect.left < m.rect.right and r.rect.right > m.rect.right and (r.velx <0):
+                    rivales.remove(r)
+                    r=obj.Rival([r.rect.x,r.rect.y],gm.recortarImagen(1,3,'saibamanleft.png'))
                     r.velx *= -1
+                    typesaiba = 4
+                    rivales.add(r)
         for r2 in rivales2:
             if pygame.sprite.collide_rect(m,r2):
-                if (r2.rect.right > m.rect.left) and (r2.velx >0):
+                if (r2.rect.right > m.rect.left) and (r2.rect.left < m.rect.left) and (r2.velx >0):
+                    rivales2.remove(r2)
+                    r2=obj.Rival2([r2.rect.x,r2.rect.y],gm.recortarImagen(1,3,'celljrleft.png'))
+                    typecell = 3
                     r2.velx *= -1
-                elif r2.rect.left < m.rect.right and (r2.velx <0):
+                    rivales2.add(r2)
+                elif r2.rect.left < m.rect.right and r2.rect.right > m.rect.right and (r2.velx <0):
+                    rivales2.remove(r2)
+                    r2=obj.Rival2([r2.rect.x,r2.rect.y],gm.recortarImagen(1,3,'celljrright.png'))
                     r2.velx *= -1
+                    typecell = 4
+                    rivales2.add(r2)
 
     # Final del Juego
     if life <= 0:
@@ -422,4 +450,7 @@ gm.gameover(pantalla,score)
 while not (fin):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            fin = True
+                fin =True
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
+                fin =True

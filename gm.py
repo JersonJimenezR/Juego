@@ -24,14 +24,14 @@ def pantalla(title,size=[640,480]):
 def CreateRv(imagen,n,group,size=[1080,680],limit=[600,50]):
     for i in range(n):
         s = obj.Rival([0,0],imagen)
-        s.rect.x = random.randrange(size[0])
+        s.rect.x = random.randrange(550,size[0])
         s.rect.y = random.randrange(limit[0],size[1]-limit[1])
         group.add(s)
-def CreateRv2(imagen,n,group,size=[1080,680],limit=[100,50]):
+def CreateRv2(imagen,n,group,size=[1080,680],limit=[20,50]):
     for i in range(n):
         s1 = obj.Rival2([0,0],imagen)
-        s1.rect.x = random.randrange((size[0]/2),size[0])
-        s1.rect.y = random.randrange(limit[0],size[1]-limit[1])
+        s1.rect.x = random.randrange(0,500)
+        s1.rect.y = random.randrange(200,380)
         group.add(s1)
 
 def StGoku(life,group,pi=[5,5],base=60):

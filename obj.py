@@ -124,7 +124,7 @@ class Jugador (pygame.sprite.Sprite):
 
     def gravedad(self):
         if self.vely != 0:
-            self.vely += 0.1
+            self.vely += 0.5
         else:
             self.vely = 1
 
@@ -174,7 +174,6 @@ class Jugador (pygame.sprite.Sprite):
                 self.state +=1
             else:
                 self.state = 0
-
 
 class Poder (pygame.sprite.Sprite):
     def __init__(self,pto,imagen):
